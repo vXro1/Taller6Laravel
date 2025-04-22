@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Post</title>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;800&family=Work+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-neon: #00e5ff;
+            --secondary-neon: #f700ff;
+            --text-glow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: linear-gradient(135deg, #050520, #000);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            margin: 0;
+        }
+
+        /* Stars background */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        /* Form container */
+        .form-wrapper {
+            width: 100%;
+            max-width: 650px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .form-container {
+            position: relative;
+            background: rgba(10, 10, 30, 0.6);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow:
+                0 0 20px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(0, 229, 255, 0.2),
+                0 0 40px rgba(247, 0, 255, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+        }
+
+        /* Animated top border */
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg,
+                transparent,
+                var(--primary-neon),
+                var(--secondary-neon),
+                transparent);
+            animation: borderLine 4s linear infinite;
+        }
+
+        @keyframes borderLine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Title with better contrast */
+        .form-title {
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 800;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: white;
+            text-shadow:
+                0 0 5px var(--primary-neon),
+                0 0 10px var(--secondary-neon);
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-title::after {
+            content: '';
+            display: block;
+            width: 50%;
+            height: 1px;
+            background: linear-gradient(90deg,
+                transparent,
+                rgba(255, 255, 255, 0.5),
+                transparent);
+            margin: 0.75rem auto 0;
+        }
+
+        /* Improved input fields */
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #e0e0e0;
+            font-weight: 400;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .input-field {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            padding: 0.75rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-neon);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        textarea.input-field {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Improved button with contrast */
+        .submit-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: auto;
+            margin: 1.5rem auto 0;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(45deg, #6600cc, #9900ff);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(153, 0, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+        }
+
+        .submit-button i {
+            margin-right: 0.5rem;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 0 20px rgba(153, 0, 255, 0.7),
+                0 0 30px rgba(0, 229, 255, 0.4);
+        }
+
+        .submit-button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+        }
+
+        .submit-button:hover::after {
+            left: 100%;
+        }
+
+        /* Subtle glow effects in corners */
+        .corner-glow {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            filter: blur(30px);
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .top-left {
+            top: -20px;
+            left: -20px;
+            background: var(--primary-neon);
+        }
+
+        .bottom-right {
+            bottom: -20px;
+            right: -20px;
+            background: var(--secondary-neon);
+        }
+    </style>
+</head>
+<body>
+    <!-- Stars background -->
+    <div class="stars-container" id="stars-container"></div>
+
+    <div class="form-wrapper">
+        <div class="form-container">
+            <!-- Corner glow effects -->
+            <div class="corner-glow top-left"></div>
+            <div class="corner-glow bottom-right"></div>
+
+            <h1 class="form-title">Update Post</h1>
+
+            <form method="POST" action="{{ route('posts.update', $post) }}">
+                @csrf
+                @method('PUT')
+
+                <div class="input-group">
+                    <label for="titulo" class="input-label">TITLE</label>
+                    <input type="text" id="titulo" name="titulo" value="{{ $post->titulo }}" class="input-field">
+                </div>
+
+                <div class="input-group">
+                    <label for="contenido" class="input-label">CONTENT</label>
+                    <textarea id="contenido" name="contenido" class="input-field">{{ $post->contenido }}</textarea>
+                </div>
+
+                <button type="submit" class="submit-button">
+                    <i class="fas fa-sync-alt"></i> Update Post
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Create stars background
+        document.addEventListener('DOMContentLoaded', function() {
+            const starsContainer = document.getElementById('stars-container');
+            const starsCount = 100;
+
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+
+                // Random position
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+
+                // Random size
+                const size = Math.random() * 2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+
+                // Random opacity
+                star.style.opacity = Math.random() * 0.8 + 0.2;
+
+                // Add random twinkle animation
+                if (Math.random() > 0.7) {
+                    star.style.animation = `twinkle ${Math.random() * 5 + 3}s infinite ease-in-out`;
+                }
+
+                starsContainer.appendChild(star);
+            }
+        });
+
+        // Add twinkle animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes twinkle {
+                0%, 100% { opacity: 0.2; }
+                50% { opacity: 0.8; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
